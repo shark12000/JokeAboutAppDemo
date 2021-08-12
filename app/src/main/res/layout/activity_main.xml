@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+   <LinearLayout
+       android:layout_centerVertical="true"
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <RadioGroup
+           android:id="@+id/radioGroup"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent">
+
+           <RadioButton
+               android:id="@+id/treMinRadio"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="RadioButton" />
+
+           <RadioButton
+               android:id="@+id/femMinRadio"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="RadioButton" />
+
+           <RadioButton
+               android:id="@+id/enHourRadio"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="RadioButton" />
+       </RadioGroup>
+
+
+       <EditText
+           android:id="@+id/firstName"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="28dp"
+           android:hint="First name"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintHorizontal_bias="0.498"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+       <EditText
+           android:id="@+id/lastName"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="28dp"
+           android:hint="Last name"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintHorizontal_bias="0.498"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+       <Button
+           android:id="@+id/button"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="28dp"
+           android:text="Save"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/editText2" />
+
+   </LinearLayout>
+
+
+</RelativeLayout>
