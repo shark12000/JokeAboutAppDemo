@@ -20,17 +20,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var radioGroup: RadioGroup
     private lateinit var mReceiver: MyAlarm
 
+    companion object {
+        const val FIVE_MINUTES: Long = 5
+        const val HALF_HOUR: Long  = 30
+        const val ONE_HOUR: Long  = 60
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         init()
         onButtonClicked()
-        passData()
-    }
-
-    override fun onStart() {
-        super.onStart()
-
     }
 
     private fun init() {
@@ -44,26 +44,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onButtonClicked() {
-       saveButton.setOnClickListener {
-           when (radioGroup.checkedRadioButtonId) {
-               R.id.enHourRadio -> setAlarm(TimeUnit.MINUTES.toMillis(60))
-               R.id.femMinRadio -> setAlarm(TimeUnit.MINUTES.toMillis(5))
-               R.id.treMinRadio -> setAlarm(TimeUnit.SECONDS.toMillis(30))
-           }
-       }
+        saveButton.setOnClickListener {
+            when (radioGroup.checkedRadioButtonId) {
+                R.id.enHourRadio -> setAlarm(TimeUnit.MINUTES.toMillis(ONE_HOUR))
+                R.id.femMinRadio -> setAlarm(TimeUnit.MINUTES.toMillis(FIVE_MINUTES))
+                R.id.treMinRadio -> setAlarm(TimeUnit.SECONDS.toMillis(HALF_HOUR))
+            }
+        }
     }
 
-    private fun passData() {
-        val intent = Intent(baseContext, MyAlarm::class.java)
-        intent.putExtra("firstName", firstNameText.text.toString())
-        intent.putExtra("lastName", lastNameTextView.text.toString())
-    }
 
     private fun setAlarm(timeInMillis: Long) {
         val alarmManager: AlarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, MyAlarm::class.java)
         val pendingIntent: PendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
         alarmManager.setRepeating(AlarmManager.RTC, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
-        Toast.makeText(this, "Alarm is set", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, timeInMillis.toString(), Toast.LENGTH_SHORT).show()
     }
 }

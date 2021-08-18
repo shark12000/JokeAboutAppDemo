@@ -1,26 +1,58 @@
 package com.example.alarmmanager
 
+import android.app.Notification
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
-import androidx.work.Data
+import android.content.Intent
+import android.media.RingtoneManager
+import androidx.core.app.NotificationCompat
+import androidx.core.content.contentValuesOf
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import okhttp3.*
+import com.example.alarmmanager.data.InfoPreferences
+import com.example.alarmmanager.data.JokeRepository
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.json.JSONObject
-import java.io.IOException
 
-class JokeWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
-    override fun doWork(): Result {
-        val string = getJoke(inputData.getString("firstName")!!, inputData.getString("lastName")!!)
-        val outputData: Data = Data.Builder().putString("joke", string).build()
-        return Result.success(outputData)
+class JokeWorker(private val context: Context, params: WorkerParameters) : Worker(context, params) {
+    private val jokeRepository = JokeRepository(InfoPreferences(context))
+
+    companion object {
+        const val PRIORITY_HIGH = 2
     }
 
-    private fun getJoke(firstName: String, lastName: String) : String {
-        val client = OkHttpClient()
-        lateinit var responseString: String
+    override fun doWork(): Result {
+        getJoke(jokeRepository.loadData().firstName!!, jokeRepository.loadData().lastName!!)
+        showNotification(context = context)
+        return Result.success()
+    }
 
-        val urlBuilder: HttpUrl.Builder = "http://api.icndb.com/jokes/random".toHttpUrlOrNull()!!.newBuilder()
+    private fun showNotification(context: Context) {
+        val intent = PendingIntent
+                .getActivity(context, 0
+                        , Intent(context, MainActivity::class.java), 0)
+
+        val builder = NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("Joke!!!")
+                .setContentText(jokeRepository.loadJoke())
+                .setPriority(PRIORITY_HIGH)
+                .setContentIntent(intent)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+
+        val notification: Notification = builder.notification
+        val manager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.notify(0, notification)
+    }
+
+    private fun getJoke(firstName: String, lastName: String) {
+        val client = OkHttpClient()
+
+        val urlBuilder: HttpUrl.Builder = "https://api.icndb.com/jokes/random".toHttpUrlOrNull()!!.newBuilder()
         urlBuilder.addQueryParameter("firstName", firstName)
         urlBuilder.addQueryParameter("lastName", lastName)
 
@@ -28,19 +60,17 @@ class JokeWorker(context: Context, params: WorkerParameters) : Worker(context, p
                 .url(urlBuilder.build().toString())
                 .build()
 
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                call.cancel()
-            }
-
-            override fun onResponse(call: Call, response: Response) {
+        client.newCall(request).execute().use { response ->
+            try {
                 if(response.isSuccessful) {
                     val json = JSONObject(response.body!!.string())
-                    responseString = json.getString("joke")
+                    val joke = json.getJSONObject("value")
+                    jokeRepository.saveJoke(joke.getString("joke"))
                 }
+            } catch (e: Exception) {
+                jokeRepository.saveJoke(e.message.toString())
             }
-        })
 
-        return responseString
+        }
     }
 }

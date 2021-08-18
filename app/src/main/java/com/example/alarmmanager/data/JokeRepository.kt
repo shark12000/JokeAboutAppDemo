@@ -1,18 +1,13 @@
 package com.example.alarmmanager.data
 
-import android.provider.MediaStore
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.work.WorkInfo
 import com.example.alarmmanager.UserData
 
 class JokeRepository(private val infoPreferences: InfoPreferences) {
 
     private var userData = infoPreferences.loadData()
-    private var mData: MediatorLiveData<WorkInfo> = MediatorLiveData()
 
     fun saveData(userData: UserData) {
-        infoPreferences.saveData(userData.firstName!!, userData.lastName!!)
+        infoPreferences.saveData(userData.firstName!!, userData.lastName!!, userData.time!!)
         this.userData = userData
     }
 
@@ -20,15 +15,11 @@ class JokeRepository(private val infoPreferences: InfoPreferences) {
         return userData
     }
 
-    fun getJoke() : LiveData<WorkInfo> {
-        return mData
+    fun saveJoke(joke: String) {
+        infoPreferences.saveJoke(joke)
     }
 
-    fun addDataSource(data: LiveData<WorkInfo>)  {
-        mData.addSource(data, mData::setValue)
-    }
-
-    fun removeDataSource(data: LiveData<WorkInfo>)  {
-        mData.removeSource(data)
+    fun loadJoke() : String {
+        return infoPreferences.loadJoke()
     }
 }

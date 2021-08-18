@@ -23,19 +23,19 @@
                android:id="@+id/treMinRadio"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="RadioButton" />
+               android:text="30 min" />
 
            <RadioButton
                android:id="@+id/femMinRadio"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="RadioButton" />
+               android:text="5 min" />
 
            <RadioButton
                android:id="@+id/enHourRadio"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="RadioButton" />
+               android:text="1 hour" />
        </RadioGroup>
 
 
