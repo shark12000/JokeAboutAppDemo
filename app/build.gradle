@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -54,6 +56,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
+    // Dagger - Hilt
+    implementation "com.google.dagger:hilt-android:2.37"
+    kapt "com.google.dagger:hilt-android-compiler:2.37"
 
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.0"))
 

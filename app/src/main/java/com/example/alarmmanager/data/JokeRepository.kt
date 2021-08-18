@@ -1,8 +1,9 @@
 package com.example.alarmmanager.data
 
 import com.example.alarmmanager.UserData
+import javax.inject.Inject
 
-class JokeRepository(private val infoPreferences: InfoPreferences) {
+class JokeRepository @Inject constructor(private val infoPreferences: InfoPreferences) {
 
     private var userData = infoPreferences.loadData()
 

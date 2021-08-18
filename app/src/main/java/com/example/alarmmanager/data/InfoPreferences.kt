@@ -8,17 +8,17 @@ class InfoPreferences(context: Context) {
     private val userPreferences = context.getSharedPreferences("NamePref", Context.MODE_PRIVATE)
     private val editor: SharedPreferences.Editor = userPreferences.edit()
 
-    fun saveData(firstName: String, lastName:String, time: Int) {
+    fun saveData(firstName: String, lastName:String, time: Long) {
         editor.putString("name", firstName)
         editor.putString("lastName", lastName)
-        editor.putInt("time", time)
+        editor.putLong("time", time)
         editor.apply()
     }
 
     fun loadData(): UserData {
         val firstName = userPreferences.getString("name", "")
         val lastName = userPreferences.getString("lastName", "")
-        val time = userPreferences.getInt("time", 0)
+        val time = userPreferences.getLong("time", 0)
         return UserData(firstName, lastName, time)
     }
 
