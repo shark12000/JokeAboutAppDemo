@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var radioButtonFor30Min: RadioButton
     private lateinit var radioButtonFor60Min: RadioButton
     private lateinit var radioGroup: RadioGroup
-    private lateinit var mReceiver: MyAlarm
 
     companion object {
         const val FIVE_MINUTES: Long = 5
